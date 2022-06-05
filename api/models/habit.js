@@ -10,6 +10,7 @@ class Habit {
         this.completed = data.completed
         this.streak = data.streak
         this.startdate = data.startdate
+        this.userId = data.userId
     }
 
     static get all() {
