@@ -10,6 +10,7 @@ class Habit {
         this.completed = data.completed
         this.streak = data.streak
         this.startdate = data.startdate
+        this.userId = data.userId
     }
 
     static get all() {
@@ -17,7 +18,7 @@ class Habit {
             try {
                 const db = await init()
                 const habitsData = await db.collection('habits').find().toArray()
-                const habits = habitsData.map(d => new User({ ...d, id: d._id }))
+                const habits = habitsData.map(d => new Habit({ ...d, id: d._id }))
                 res(habits);
             } catch (err) {
                 console.log(err);

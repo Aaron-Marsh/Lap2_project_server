@@ -3,6 +3,7 @@ const { ObjectId } = require('mongodb')
 
 class User {
     constructor(data){
+        this.id = data.id
         this.username = data.username
         this.email = data.email
         this.passwordDigest = data.passwordDigest
