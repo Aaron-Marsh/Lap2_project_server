@@ -1,5 +1,6 @@
 const { init } = require ('../dbConfig')
 const { ObjectId } = require('mongodb')
+// const { create } = require('./habit')
 
 class User {
     constructor(data){
@@ -7,6 +8,7 @@ class User {
         this.username = data.username
         this.email = data.email
         this.passwordDigest = data.passwordDigest
+        this.prevDate = data.prevDate
     }
 
     static get all() {
