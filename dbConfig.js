@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb') //brings in mongo
-const connectionUrl = "mongodb+srv://Aaron:hHw659AirIPVfL5O@cluster0.6znh3nh.mongodb.net/test";
+const connectionUrl = process.env.MONGODB_URI || "mongodb+srv://Aaron:hHw659AirIPVfL5O@cluster0.6znh3nh.mongodb.net/test";
 
 const dbName = "habitrabbits"
 

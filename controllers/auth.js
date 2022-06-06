@@ -19,7 +19,7 @@ async function login(req, res) {
         if(!user){ throw new Error('No user with this email') }
         const authed = bcrypt.compare(req.body.password, user.passwordDigest)
         if (!!authed) {
-            res.status(200).json({ user: user.username });
+            res.status(200).json({ username: user.username, id: user.id });
         } else {
             throw new Error('User could not be authenticated')
         }

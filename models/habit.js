@@ -7,6 +7,7 @@ class Habit {
         this.title = data.title
         this.frequency = data.frequency
         this.goal = data.goal
+        this.current = data.current
         this.completed = data.completed
         this.streak = data.streak
         this.startdate = data.startdate

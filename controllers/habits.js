@@ -9,4 +9,8 @@ async function index(req, res) {
     }
 }
 
+async function create(req, res) {
+    
+}
+
 module.exports = { index };
