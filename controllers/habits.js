@@ -20,7 +20,12 @@ async function show(req,res) {
 
 
 async function create(req, res) {
-
+    try {
+        const habit = await Habit.create(req.body.title, req.body.frequency, req.body.goal, req.body.startdate, req.body.userId);
+        res.json(habit)
+    } catch(err) {
+        res.status(404).json({err})
+    }
 }
 
-module.exports = { index, show };
+module.exports = { index, show, create };

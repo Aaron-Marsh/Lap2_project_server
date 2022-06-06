@@ -41,6 +41,19 @@ class Habit {
             }
         })
     }
+
+    static create(title, frequency, goal, startdate, userId) {
+        return new Promise (async (res, rej) => {
+            try {
+                const db = await init();
+                let habitData = await db.collection('habits').insertOne({ title, frequency, goal, current: 0, completed: false, streak: 0, startdate, userId  });
+                let newHabit = new Habit(habitData.ops[0]);
+                res(newHabit);
+            } catch (err) {
+                rej('Error creating habit')
+            }
+        })
+    }
 }
 
 module.exports = Habit;
