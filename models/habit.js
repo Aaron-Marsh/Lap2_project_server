@@ -54,6 +54,18 @@ class Habit {
             }
         })
     }
+
+    static destroy() {
+        return new Promise (async (res, rej) => {
+            try{
+                const db = await init();
+                await db.collection('habits').deleteOne({_id: ObjectId(this.id)})
+                res('Habit was deleted')
+            } catch(err) {
+                rej('Habit could not be deleted')
+            }
+        })
+    }
 }
 
 module.exports = Habit;

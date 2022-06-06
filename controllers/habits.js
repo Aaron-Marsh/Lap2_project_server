@@ -22,10 +22,20 @@ async function show(req,res) {
 async function create(req, res) {
     try {
         const habit = await Habit.create(req.body.title, req.body.frequency, req.body.goal, req.body.startdate, req.body.userId);
-        res.json(habit)
+        res.json(habit);
     } catch(err) {
-        res.status(404).json({err})
+        res.status(404).json({err});
     }
 }
 
-module.exports = { index, show, create };
+async function destroy(req, res) {
+    try {
+        const habit = await Habit.findById(req.params.id);
+        await habit.destroy();
+        res.status(204).json('Habit deleted');
+    } catch(err) {
+        res.status(500).json({err});
+    }
+}
+
+module.exports = { index, show, create, destroy };
