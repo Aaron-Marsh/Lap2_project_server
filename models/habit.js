@@ -41,6 +41,31 @@ class Habit {
             }
         })
     }
+
+    static create(title, frequency, goal, startdate, userId) {
+        return new Promise (async (res, rej) => {
+            try {
+                const db = await init();
+                let habitData = await db.collection('habits').insertOne({ title, frequency, goal, current: 0, completed: false, streak: 0, startdate, userId  });
+                let newHabit = new Habit(habitData.ops[0]);
+                res(newHabit);
+            } catch (err) {
+                rej('Error creating habit')
+            }
+        })
+    }
+
+    static destroy() {
+        return new Promise (async (res, rej) => {
+            try{
+                const db = await init();
+                await db.collection('habits').deleteOne({_id: ObjectId(this.id)})
+                res('Habit was deleted')
+            } catch(err) {
+                rej('Habit could not be deleted')
+            }
+        })
+    }
 }
 
 module.exports = Habit;
