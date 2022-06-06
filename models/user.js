@@ -29,7 +29,11 @@ class User {
         return new Promise(async(res, rej) => {
             try {
                 const db = await init();
-                let result = await db.collection('users').insertOne({ username, email, password })
+                // get date (could do on client side)
+                let today = new Date;
+                let currentdate = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
+
+                let result = await db.collection('users').insertOne({ username, email, password, prevDate: currentdate });
                 let newUser = new User(result.ops[0]);
                 res (newUser);
             } catch (err) {
