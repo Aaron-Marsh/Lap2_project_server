@@ -27,6 +27,20 @@ class Habit {
             }
         })
     }
+
+    // Find with habit ID
+    static findById(id) {
+        return new Promise (async (res, rej) => {
+            try {
+                const db = await init();
+                let habitData = await db.collection('habits').find({ _id: ObjectId(id) }).toArray()
+                let habit = new Habit({...habitData[0], id: habitData[0]._id});
+                res(habit);
+            } catch(err) {
+                rej('Habit not found')
+            }
+        })
+    }
 }
 
 module.exports = Habit;
