@@ -24,6 +24,19 @@ class User {
         })
     }
 
+    static findById(id) {
+        return new Promise (async (res, rej) => {
+            try {
+                const db = await init();
+                let userData = await db.collection('users').find({ _id: ObjectId(id) }).toArray()
+                let user = new User({...userData[0], id: userData[0]._id});
+                res(user);
+            } catch(err) {
+                rej('User not found')
+            }
+        })
+    }
+
     static create({ username, password }) {
         return new Promise(async(res, rej) => {
             try {
