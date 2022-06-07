@@ -41,6 +41,21 @@ class Habit {
             }
         })
     }
+    // Find all habits with user ID
+    static findByUserId(userId) {
+        return new Promise (async (res, rej) => {
+            try {
+                const db = await init();
+                let habitsData = await db.collection('habits').find({ userId: userId }).toArray()
+                const userHabits = habitsData.map(d => new Habit({ ...d, id: d._id }))
+                res(userHabits)
+            } catch(err) {
+                rej('User habits not found')
+            }
+        })
+    }
+
+
 
     static create(title, frequency, goal, startdate, userId) {
         return new Promise (async (res, rej) => {
