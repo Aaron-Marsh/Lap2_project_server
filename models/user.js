@@ -6,7 +6,6 @@ class User {
     constructor(data){
         this.id = data.id
         this.username = data.username
-        this.email = data.email
         this.passwordDigest = data.passwordDigest
         this.prevDate = data.prevDate
     }
@@ -25,7 +24,7 @@ class User {
         })
     }
 
-    static create({ username, email, password }) {
+    static create({ username, password }) {
         return new Promise(async(res, rej) => {
             try {
                 const db = await init();
@@ -33,7 +32,7 @@ class User {
                 let today = new Date;
                 let currentdate = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
 
-                let result = await db.collection('users').insertOne({ username, email, password, prevDate: currentdate });
+                let result = await db.collection('users').insertOne({ username, passwordDigest: password, prevDate: currentdate });
                 let newUser = new User(result.insertedId);
                 res (newUser);
             } catch (err) {
@@ -42,12 +41,13 @@ class User {
         })
     }
 
-    static findByEmail(email) {
+    static findByUsername(username) {
         return new Promise(async (res, rej) => {
             try {
                 const db = await init();
-                let result = await db.collection('users').find({ email: email }).toArray();
-                let user = new User(result.insertedId);
+                let result = await db.collection('users').find({ username }).toArray();
+                let user = new User({...result[0], id: result[0]._id});
+                console.log(user)
                 res(user);
             } catch (err) {
                 rej(`Error retrieving user: ${err}`)

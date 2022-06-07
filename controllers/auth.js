@@ -15,11 +15,11 @@ async function register(req, res) {
 
 async function login(req, res) {
     try {
-        const user = await User.findByEmail(req.body.email);
-        if(!user){ throw new Error('No user with this email') }
+        const user = await User.findByUsername(req.body.username);
+        if(!user){ throw new Error('No user with this username') }
         const authed = bcrypt.compare(req.body.password, user.passwordDigest)
         if (!!authed) {
-            res.status(200).json({ username: user.username, id: user.id });
+            res.status(200).json({ username: user.username, userId: user.id, prevDate: user.prevDate});
         } else {
             throw new Error('User could not be authenticated')
         }
