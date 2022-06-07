@@ -55,6 +55,28 @@ class Habit {
         })
     }
 
+    static updateOnNewDay(userId, prevdate, currentdate) {
+        return new Promise (async (res, rej) => {
+            const db = await init();
+            // let habits = Habit.findByUserId(userId)
+            // habits.forEach(h => {
+            //     if (h.completed === false) {
+            //         await db.collection('habits').updateOne( {_id: ObjectId(this.id) }, {$set: {streak: 0}})
+                    
+            //     }
+            // })
+            let prevdateseconds = new Date(prevdate)
+            let currentdateseconds = new Date(currentdate)
+            if ((prevdateseconds.getTime() + 1000 * 3600 * 24) < currentdateseconds.getTime()) {
+                const allHabits = await db.collection('habits').updateMany( { userId: ObjectId(userId), frequency: "daily" }, { $set: { streak: 0}} )
+            } else {
+            const uncompletedHabits = await db.collection('habits').updateMany( { userId: ObjectId(userId), completed: false, frequency: "daily" }, { $set: { streak: 0}} )
+            }
+            // const completedHabits = await db.collection('habits').updateMany( { userId: ObjectId(userId), completed: true }, { $set: { completed: false}} )
+
+            const ran = await db.collection('habits').updateMany( { userId: ObjectId(userId), frequency: "daily" }, {$set: {current: 0, completed: false }})
+        })
+    }
 
 
     static create(title, frequency, goal, startdate, userId) {
