@@ -34,7 +34,7 @@ class User {
                 let currentdate = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
 
                 let result = await db.collection('users').insertOne({ username, email, password, prevDate: currentdate });
-                let newUser = new User(result.ops[0]);
+                let newUser = new User(result.insertedId);
                 res (newUser);
             } catch (err) {
                 rej(`Error creating user: ${err}`);
@@ -47,7 +47,7 @@ class User {
             try {
                 const db = await init();
                 let result = await db.collection('users').find({ email: email }).toArray();
-                let user = new User(result.ops[0]);
+                let user = new User(result.insertedId);
                 res(user);
             } catch (err) {
                 rej(`Error retrieving user: ${err}`)

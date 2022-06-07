@@ -31,9 +31,19 @@ async function showUserHabits(req, res) {
 async function create(req, res) {
     try {
         const habit = await Habit.create(req.body.title, req.body.frequency, req.body.goal, req.body.startdate, req.body.userId);
-        res.json(habit);
+        res.status(201).json('Habit was created');
     } catch(err) {
         res.status(404).json({err});
+    }
+}
+
+async function patch(req, res) {
+    try {
+        const habit = await Habit.findById(req.body.id);
+        const updatedHabit = await habit.update(req.body.id, req.body.command);
+        res.json(updatedHabit);
+    } catch (err) {
+        res.status(404).json({err})
     }
 }
 
@@ -47,4 +57,4 @@ async function destroy(req, res) {
     }
 }
 
-module.exports = { index, show, showUserHabits, create, destroy };
+module.exports = { index, show, showUserHabits, create, patch, destroy };
