@@ -47,8 +47,24 @@ class User {
                 const db = await init();
                 let result = await db.collection('users').find({ username }).toArray();
                 let user = new User({...result[0], id: result[0]._id});
-                console.log(user)
                 res(user);
+            } catch (err) {
+                rej(`Error retrieving user: ${err}`)
+            }
+        })
+    }
+
+    static usernameExists(username) {
+        return new Promise(async (res, rej) => {
+            try {
+                const db = await init();
+                let result = await db.collection('users').find({ username }).toArray();
+                let user = new User({...result[0]});
+                let exists = true;
+                if (!user.username) {
+                    exists = false
+                }
+                res(exists);
             } catch (err) {
                 rej(`Error retrieving user: ${err}`)
             }
