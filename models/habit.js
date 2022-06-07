@@ -74,11 +74,22 @@ class Habit {
         return new Promise (async (res, rej) => {
             try {
                 const db = await init();
-                const updatedHabit = await db.collection('habits').updateOne( {_id: ObjectId(this.id) }, {$inc: {current: command}})
-                res(updatedHabit);
+                if (typeof command === 'string') {
+                    const updatedHabit = await db.collection('habits').updateOne( {_id: ObjectId(this.id) }, {$set: {startdate: command}})
+                    res(updatedHabit);
+                } else {
+                    const updatedHabit = await db.collection('habits').updateOne( {_id: ObjectId(this.id) }, {$inc: {current: command}})
+                    res(updatedHabit);
+
+                    if (command === 1 && this.current === this.goal - 1) {
+                        const updatedHabit = await db.collection('habits').updateOne( {_id: ObjectId(this.id) }, {$set: {completed: true}, $inc: {streak: 1}})
+                    res(updatedHabit);
+                    }
+                }
             } catch(err) {
                 rej('Habit could not be updated')
             }
+        
         })
 
 
