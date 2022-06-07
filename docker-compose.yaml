@@ -10,7 +10,7 @@ services:
       - DB_CONNECTION=mongodb://billie:habitpass@db:27017
     volumes:
       - type: bind
-        source: ./api
+        source: ./
         target: /code
     command: bash -c "npm install && npm start"
   db:
