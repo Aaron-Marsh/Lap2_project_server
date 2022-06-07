@@ -23,8 +23,17 @@ async function login(req, res) {
         const user = await User.findByUsername(req.body.username);
         if(!user){ throw new Error('No user with this username') }
         const authed = bcrypt.compare(req.body.password, user.passwordDigest)
-        if (!!authed) {
+        console.log(authed)
+        if (authed) {
             res.status(200).json({ username: user.username, userId: user.id, prevDate: user.prevDate});
+
+            let today = new Date;
+            let currentdate = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
+
+            if (user.prevDate != currentdate) {
+                user.update(currentdate)
+                
+            }
         } else {
             throw new Error('User could not be authenticated')
         }

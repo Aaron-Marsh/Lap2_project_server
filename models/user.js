@@ -73,7 +73,7 @@ class User {
         return new Promise(async (res, rej) => {
             try {
                 const db = await init();
-                let result = await db.collection('users').find({ username }).toArray();
+                let result = await db.collection('users').find({ username: username }).toArray();
                 let user = new User({...result[0], id: result[0]._id});
                 res(user);
             } catch (err) {
