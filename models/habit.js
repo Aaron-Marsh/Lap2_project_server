@@ -70,11 +70,11 @@ class Habit {
         })
     }
 
-    update(id, command) {
+    update(command) {
         return new Promise (async (res, rej) => {
             try {
                 const db = await init();
-                const updatedHabit = await db.collection('habits').updateOne( {_id: ObjectId(id) }, {$inc: {current: command}})
+                const updatedHabit = await db.collection('habits').updateOne( {_id: ObjectId(this.id) }, {$inc: {current: command}})
                 res(updatedHabit);
             } catch(err) {
                 rej('Habit could not be updated')

@@ -40,7 +40,7 @@ async function create(req, res) {
 async function patch(req, res) {
     try {
         const habit = await Habit.findById(req.body.id);
-        const updatedHabit = await habit.update(req.body.id, req.body.command);
+        const updatedHabit = await habit.update(req.body.command);
         res.json(updatedHabit);
     } catch (err) {
         res.status(404).json({err})

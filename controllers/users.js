@@ -9,4 +9,14 @@ async function index(req, res) {
     }
 }
 
+async function patch(req, res) {
+    try {
+        const user = await User.findById(req.body.id);
+        const updatedUser = await user.update(req.body.newPrevDate);
+        res.json(updatedUser);
+    } catch (err) {
+        res.status(404).json({err})
+    }
+}
+
 module.exports = { index };

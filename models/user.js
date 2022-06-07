@@ -41,6 +41,21 @@ class User {
         })
     }
 
+    update(newPrevDate) {
+        return new Promise (async (res, rej) => {
+            try {
+                const db = await init();
+                const updatedUser = await db.collection('users').updateOne( {_id: ObjectId(this.id) }, {$set: {prevDate: newPrevDate}})
+                res(updatedUser);
+            } catch(err) {
+                rej('User could not be updated')
+            }
+        })
+
+
+
+    }
+
     static findByUsername(username) {
         return new Promise(async (res, rej) => {
             try {
