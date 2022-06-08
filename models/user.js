@@ -64,8 +64,47 @@ class User {
                 rej('User could not be updated')
             }
         })
+        
+        
+        
+    }
+    
+    updateOnNewDay(currentDate) {
+        console.log('using function')
+
+        return new Promise (async (res, rej) => {
+            try {
+            const db = await init();
+                
+            let userId = this.id.toString()
+            let prevDateAsDate = new Date(this.prevDate)
+            let currentDateAsDate = new Date(currentDate)
+            let prevDateSeconds = prevDateAsDate.getTime()
+            let currentDateSeconds = currentDateAsDate.getTime()
+                console.log(prevDateSeconds)
+                console.log(this.prevDate)
+                console.log(currentDateSeconds)
+                console.log(currentDate)
+                console.log(userId)
+
+                // Update all daily habits
+            if (( prevDateSeconds + 1000 * 3600 * 24) < currentDateSeconds) {
+                // If more than one day since login, end all daily streaks
+                await db.collection('habits').updateMany( { userId, frequency: 'daily' }, { $set: { streak: 0}} )
+            } else {
+                // if one day since login, end streaks for uncompleted daily habits
+                await db.collection('habits').updateMany( { userId, completed: false, frequency: 'daily' }, { $set: { streak: 0}} )
+            }
+                // set current to 0 and completed to false for all daily habits
+            await db.collection('habits').updateMany( { userId, frequency: 'daily' }, {$set: {current: 0, completed: false }})
+            res('Update on new day complete')
 
 
+
+        } catch(err) {
+            rej('Could not complete update on new day')
+        }
+    })
 
     }
 
