@@ -79,16 +79,16 @@ class User {
             let userId = this.id.toString()
             let prevDateAsDate = new Date(this.prevDate)
             let currentDateAsDate = new Date(currentDate)
-            let prevDateSeconds = prevDateAsDate.getTime()
-            let currentDateSeconds = currentDateAsDate.getTime()
-                console.log(prevDateSeconds)
+            let prevDateInDays = prevDateAsDate.getTime() / (1000 * 3600 * 24);
+            let currentDateInDays = currentDateAsDate.getTime() / (1000 * 3600 * 24);
+                console.log(prevDateInDays)
                 console.log(this.prevDate)
-                console.log(currentDateSeconds)
+                console.log(currentDateInDays)
                 console.log(currentDate)
                 console.log(userId)
 
-                // Update all daily habits
-            if (( prevDateSeconds + 1000 * 3600 * 24) < currentDateSeconds) {
+            // Update all daily habits
+            if ( currentDateInDays > (prevDateInDays + 1)) {
                 // If more than one day since login, end all daily streaks
                 await db.collection('habits').updateMany( { userId, frequency: 'daily' }, { $set: { streak: 0}} )
             } else {
@@ -98,6 +98,9 @@ class User {
                 // set current to 0 and completed to false for all daily habits
             await db.collection('habits').updateMany( { userId, frequency: 'daily' }, {$set: {current: 0, completed: false }})
             res('Update on new day complete')
+
+            // Update all weekly habits
+
 
 
 
