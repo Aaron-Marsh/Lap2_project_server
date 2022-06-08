@@ -43,7 +43,7 @@ class User {
                 const db = await init();
                 // get date (could do on client side)
                 let today = new Date;
-                let currentdate = `${today.getDate()}-${today.getMonth()+1}-${today.getFullYear()}`;
+                let currentdate = `${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()}`;
 
                 let result = await db.collection('users').insertOne({ username, passwordDigest: password, prevDate: currentdate });
                 let newUser = new User(result.insertedId);
@@ -79,28 +79,64 @@ class User {
             let userId = this.id.toString()
             let prevDateAsDate = new Date(this.prevDate)
             let currentDateAsDate = new Date(currentDate)
-            let prevDateSeconds = prevDateAsDate.getTime()
-            let currentDateSeconds = currentDateAsDate.getTime()
-                console.log(prevDateSeconds)
-                console.log(this.prevDate)
-                console.log(currentDateSeconds)
-                console.log(currentDate)
-                console.log(userId)
+            let firstdate = new Date('1/1/1970')
+            let firstDateInDays = firstdate.getTime() / (1000 * 3600 * 24);
+            let prevDateInDays = prevDateAsDate.getTime() / (1000 * 3600 * 24);
+            let currentDateInDays = currentDateAsDate.getTime() / (1000 * 3600 * 24);
+                // console.log(prevDateInDays)
+                // console.log(this.prevDate)
+                // console.log(currentDateInDays)
+                // console.log(currentDate)
+                // console.log(userId)
+                // console.log(firstDateInDays)
+                // console.log(firstdate.splice("/")[1])
 
-                // Update all daily habits
-            if (( prevDateSeconds + 1000 * 3600 * 24) < currentDateSeconds) {
+            // Update all daily habits
+            if ( currentDateInDays > (prevDateInDays + 1)) {
                 // If more than one day since login, end all daily streaks
                 await db.collection('habits').updateMany( { userId, frequency: 'daily' }, { $set: { streak: 0}} )
             } else {
                 // if one day since login, end streaks for uncompleted daily habits
                 await db.collection('habits').updateMany( { userId, completed: false, frequency: 'daily' }, { $set: { streak: 0}} )
             }
-                // set current to 0 and completed to false for all daily habits
+            // set current to 0 and completed to false for all daily habits
             await db.collection('habits').updateMany( { userId, frequency: 'daily' }, {$set: {current: 0, completed: false }})
-            res('Update on new day complete')
+            
+            // Update all weekly habits
+            let prevSundayInDays = prevDateInDays - ((prevDateInDays + 4) % 7)
+            // console.log(prevSundayInDays)
+            // console.log(currentDateInDays - prevSundayInDays)
 
-
-
+            if (currentDateInDays >= prevSundayInDays + 7) {
+                
+                if ( currentDateInDays >= prevSundayInDays + 14) {
+                    // If more than two weeks since the previous weekly period started, end all weekly streaks
+                    await db.collection('habits').updateMany( { userId, frequency: 'weekly' }, { $set: { streak: 0}} )
+                } else {
+                    // if one week since previous weekly period started, end streaks for uncompleted weekly habits
+                    await db.collection('habits').updateMany( { userId, completed: false, frequency: 'weekly' }, { $set: { streak: 0}} )
+                }
+                // set current to 0 and completed to false for all weekly habits
+                await db.collection('habits').updateMany( { userId, frequency: 'weekly' }, {$set: {current: 0, completed: false }})
+            }
+            
+            // Update all monthly habits
+            // let prevDateMonth = prevDateAsDate.getMonth()
+            // console.log(prevMonth)
+            // let currentDateMonth = currentDateAsDate.getMonth()
+            // if (currentDateMonth /= prevDateMonth) {
+            //     if ((currentDateMonth === prevDateMonth + 1 || currentDateMonth === prevDateMonth - 12) && (currentDateInDays < prevDateInDays + 100)) {
+            //         // if next month after last login, end streaks for uncompleted monthly habits
+            //         await db.collection('habits').updateMany( { userId, completed: false, frequency: 'monthly' }, { $set: { streak: 0}} )
+            //     } else {
+            //         // If missed a month since last login, end all monthly streaks
+            //         await db.collection('habits').updateMany( { userId, frequency: 'monthly' }, { $set: { streak: 0}} )
+            //     }
+            //     // set current to 0 and completed to false for all monthly habits
+            //     await db.collection('habits').updateMany( { userId, frequency: 'monthly' }, {$set: {current: 0, completed: false }})
+            // }
+                
+                res('Update on new day complete')
         } catch(err) {
             rej('Could not complete update on new day')
         }

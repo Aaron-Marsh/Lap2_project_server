@@ -28,12 +28,12 @@ async function login(req, res) {
         if (authed) {
             
             let today = new Date;
-            let currentDate = `${today.getMonth()}/${today.getDate()}/${today.getFullYear()}`;
+            let currentDate = `${today.getMonth()+1}/${today.getDate()}/${today.getFullYear()}`;
             
             
             if (user.prevDate != currentDate) {
-                // await user.update(currentDate)
                 await user.updateOnNewDay(currentDate)
+                // await user.update(currentDate)
                 
             }
             res.status(200).json({ username: user.username, userId: user.id, prevDate: user.prevDate});
