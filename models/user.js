@@ -94,13 +94,13 @@ class User {
             // Update all daily habits
             if ( currentDateInDays > (prevDateInDays + 1)) {
                 // If more than one day since login, end all daily streaks
-                await db.collection('habits').updateMany( { userId, frequency: 'daily' }, { $set: { streak: 0}} )
+                await db.collection('habits').updateMany( { userId, frequency: 'Daily' }, { $set: { streak: 0}} )
             } else {
                 // if one day since login, end streaks for uncompleted daily habits
-                await db.collection('habits').updateMany( { userId, completed: false, frequency: 'daily' }, { $set: { streak: 0}} )
+                await db.collection('habits').updateMany( { userId, completed: false, frequency: 'Daily' }, { $set: { streak: 0}} )
             }
             // set current to 0 and completed to false for all daily habits
-            await db.collection('habits').updateMany( { userId, frequency: 'daily' }, {$set: {current: 0, completed: false }})
+            await db.collection('habits').updateMany( { userId, frequency: 'Daily' }, {$set: {current: 0, completed: false }})
             
             // Update all weekly habits
             let prevSundayInDays = prevDateInDays - ((prevDateInDays + 4) % 7)
@@ -111,13 +111,13 @@ class User {
                 
                 if ( currentDateInDays >= prevSundayInDays + 14) {
                     // If more than two weeks since the previous weekly period started, end all weekly streaks
-                    await db.collection('habits').updateMany( { userId, frequency: 'weekly' }, { $set: { streak: 0}} )
+                    await db.collection('habits').updateMany( { userId, frequency: 'Weekly' }, { $set: { streak: 0}} )
                 } else {
                     // if one week since previous weekly period started, end streaks for uncompleted weekly habits
-                    await db.collection('habits').updateMany( { userId, completed: false, frequency: 'weekly' }, { $set: { streak: 0}} )
+                    await db.collection('habits').updateMany( { userId, completed: false, frequency: 'Weekly' }, { $set: { streak: 0}} )
                 }
                 // set current to 0 and completed to false for all weekly habits
-                await db.collection('habits').updateMany( { userId, frequency: 'weekly' }, {$set: {current: 0, completed: false }})
+                await db.collection('habits').updateMany( { userId, frequency: 'Weekly' }, {$set: {current: 0, completed: false }})
             }
             
             // Update all monthly habits
@@ -128,12 +128,12 @@ class User {
             if (currentDateMonth != prevDateMonth) {
                 if (((currentDateMonth === prevDateMonth + 1) || (currentDateMonth === prevDateMonth - 12)) && (currentDateInDays < prevDateInDays + 100)) {
                     // if next month after last login, end streaks for uncompleted monthly habits
-                    await db.collection('habits').updateMany( { userId, completed: false, frequency: 'monthly' }, { $set: { streak: 0}} )
+                    await db.collection('habits').updateMany( { userId, completed: false, frequency: 'Monthly' }, { $set: { streak: 0}} )
                 } else {
                     // If missed a month since last login, end all monthly streaks
-                    await db.collection('habits').updateMany( { userId, frequency: 'monthly' }, { $set: { streak: 0}} )
+                    await db.collection('habits').updateMany( { userId, frequency: 'Monthly' }, { $set: { streak: 0}} )
                 }
-                await db.collection('habits').updateMany( { userId, frequency: 'monthly' }, {$set: {current: 0, completed: false }})
+                await db.collection('habits').updateMany( { userId, frequency: 'Monthly' }, {$set: {current: 0, completed: false }})
                 // set current to 0 and completed to false for all monthly habits
             }
                 
