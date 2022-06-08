@@ -80,7 +80,7 @@ class Habit {
                     res(updatedHabit);
                 } else {
 
-                    if (command === 1 && this.current === this.goal - 1) {
+                    if ((command === 1) && (this.current === this.goal - 1)) {
                         await db.collection('habits').updateOne( {_id: ObjectId(this.id) }, {$set: {completed: true}, $inc: {streak: 1}})
                         
                     }
