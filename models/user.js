@@ -121,20 +121,21 @@ class User {
             }
             
             // Update all monthly habits
-            // let prevDateMonth = prevDateAsDate.getMonth()
-            // console.log(prevMonth)
-            // let currentDateMonth = currentDateAsDate.getMonth()
-            // if (currentDateMonth /= prevDateMonth) {
-            //     if ((currentDateMonth === prevDateMonth + 1 || currentDateMonth === prevDateMonth - 12) && (currentDateInDays < prevDateInDays + 100)) {
-            //         // if next month after last login, end streaks for uncompleted monthly habits
-            //         await db.collection('habits').updateMany( { userId, completed: false, frequency: 'monthly' }, { $set: { streak: 0}} )
-            //     } else {
-            //         // If missed a month since last login, end all monthly streaks
-            //         await db.collection('habits').updateMany( { userId, frequency: 'monthly' }, { $set: { streak: 0}} )
-            //     }
-            //     // set current to 0 and completed to false for all monthly habits
-            //     await db.collection('habits').updateMany( { userId, frequency: 'monthly' }, {$set: {current: 0, completed: false }})
-            // }
+            let prevDateMonth = prevDateAsDate.getMonth()
+            console.log("prevdatemonth"+prevDateMonth)
+            let currentDateMonth = currentDateAsDate.getMonth()
+            console.log("currentdatemonth"+currentDateMonth)
+            if (currentDateMonth != prevDateMonth) {
+                if (((currentDateMonth === prevDateMonth + 1) || (currentDateMonth === prevDateMonth - 12)) && (currentDateInDays < prevDateInDays + 100)) {
+                    // if next month after last login, end streaks for uncompleted monthly habits
+                    await db.collection('habits').updateMany( { userId, completed: false, frequency: 'monthly' }, { $set: { streak: 0}} )
+                } else {
+                    // If missed a month since last login, end all monthly streaks
+                    await db.collection('habits').updateMany( { userId, frequency: 'monthly' }, { $set: { streak: 0}} )
+                }
+                await db.collection('habits').updateMany( { userId, frequency: 'monthly' }, {$set: {current: 0, completed: false }})
+                // set current to 0 and completed to false for all monthly habits
+            }
                 
                 res('Update on new day complete')
         } catch(err) {
