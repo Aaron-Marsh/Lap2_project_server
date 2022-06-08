@@ -79,15 +79,19 @@ class User {
             let userId = this.id.toString()
             let prevDateAsDate = new Date(this.prevDate)
             let currentDateAsDate = new Date(currentDate)
+            let firstdate = new Date('1/1/1970')
+            let firstDateInDays = firstdate.getTime() / (1000 * 3600 * 24);
             let prevDateInDays = prevDateAsDate.getTime() / (1000 * 3600 * 24);
             let currentDateInDays = currentDateAsDate.getTime() / (1000 * 3600 * 24);
-                console.log(prevDateInDays)
-                console.log(this.prevDate)
+                // console.log(prevDateInDays)
+                // console.log(this.prevDate)
                 console.log(currentDateInDays)
-                console.log(currentDate)
-                console.log(userId)
+                // console.log(currentDate)
+                // console.log(userId)
+                // console.log(firstDateInDays)
 
             // Update all daily habits
+            
             if ( currentDateInDays > (prevDateInDays + 1)) {
                 // If more than one day since login, end all daily streaks
                 await db.collection('habits').updateMany( { userId, frequency: 'daily' }, { $set: { streak: 0}} )
@@ -95,15 +99,30 @@ class User {
                 // if one day since login, end streaks for uncompleted daily habits
                 await db.collection('habits').updateMany( { userId, completed: false, frequency: 'daily' }, { $set: { streak: 0}} )
             }
-                // set current to 0 and completed to false for all daily habits
+            // set current to 0 and completed to false for all daily habits
             await db.collection('habits').updateMany( { userId, frequency: 'daily' }, {$set: {current: 0, completed: false }})
-            res('Update on new day complete')
-
+            
             // Update all weekly habits
+            let prevSundayInDays = prevDateInDays - ((prevDateInDays + 4) % 7)
+            console.log(prevSundayInDays)
+            console.log(currentDateInDays - prevSundayInDays)
 
-
-
-
+            if (currentDateInDays >= prevSundayInDays + 7) {
+                
+                if ( currentDateInDays >= prevSundayInDays + 14) {
+                    // If more than two weeks since the previous weekly period started, end all weekly streaks
+                    await db.collection('habits').updateMany( { userId, frequency: 'weekly' }, { $set: { streak: 0}} )
+                } else {
+                    // if one week since previous weekly period started, end streaks for uncompleted weekly habits
+                    await db.collection('habits').updateMany( { userId, completed: false, frequency: 'weekly' }, { $set: { streak: 0}} )
+                }
+            }
+            // set current to 0 and completed to false for all weekly habits
+            await db.collection('habits').updateMany( { userId, frequency: 'weekly' }, {$set: {current: 0, completed: false }})
+            
+                
+                
+                res('Update on new day complete')
         } catch(err) {
             rej('Could not complete update on new day')
         }

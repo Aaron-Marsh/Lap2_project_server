@@ -28,7 +28,7 @@ async function login(req, res) {
         if (authed) {
             
             let today = new Date;
-            let currentDate = `${today.getMonth()}/${today.getDate()}/${today.getFullYear()}`;
+            let currentDate = `${today.getMonth()+1}/${today.getDate()}/${today.getFullYear()}`;
             
             
             if (user.prevDate != currentDate) {
