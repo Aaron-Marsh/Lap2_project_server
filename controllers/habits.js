@@ -30,7 +30,7 @@ async function showUserHabits(req, res) {
 
 async function create(req, res) {
     try {
-        const habit = await Habit.create(req.body.title, req.body.frequency, req.body.goal, req.body.startdate, req.body.userId);
+        const habit = await Habit.create(req.body.title, req.body.frequency, req.body.goal, req.body.userId);
         res.status(201).json('Habit was created');
     } catch(err) {
         res.status(404).json({err});
