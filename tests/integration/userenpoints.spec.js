@@ -1,3 +1,6 @@
+const app = require("../../server")
+const request = require('supertest');
+
 
 describe('habits endpoints', () => {
     let api;
@@ -5,7 +8,7 @@ describe('habits endpoints', () => {
     //     await resetTestDB()
     // })
     beforeAll(async () => {
-        api = app.listen(4000, () => console.log('Test server running on port 5000'))
+        api = app.listen(5000, () => console.log('Test server running on port 5000'))
 
         // console.log(api)
     });

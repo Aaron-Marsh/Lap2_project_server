@@ -1,4 +1,7 @@
-// const app = require("../../server")
+const app = require("../../server")
+const request = require('supertest');
+
+
 
 describe('habits endpoints', () => {
     let api;
