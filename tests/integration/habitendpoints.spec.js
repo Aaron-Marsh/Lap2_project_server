@@ -7,6 +7,7 @@ describe('habits endpoints', () => {
     // })
     beforeAll(async () => {
         api = app.listen(4000, () => console.log('Test server running on port 5000'))
+
         // console.log(api)
     });
     
@@ -21,24 +22,34 @@ describe('habits endpoints', () => {
     });
 
 
-    it('returns specific habit text based on habitid', async() =>{
-        const res = await request(api).get('/habits/62a20ea2ff593b1384662ab5')
-        expect(res.body.title).toBe('Drink water')
-    });
-
-    it('Creates habits and returns habit ID', async()=>{
-        const res = await request(api).post('/habits/new').send({"title": "Example title", "frequency": "Daily", "goal": 5, "current": 0, "userId": "Dummy user"})
+    
+    it('Creates habit correctly', async()=>{
+        const res = await request(api).post('/habits/new').send({"title": "Example title", "frequency": "Daily", "goal": 5, "current": 0, "userId": "DummyUser"})
         expect(res.text.toString()).toContain('Habit was created')
     });
-
-
+    
+    
+    let habitId 
+    it('Gets habits based on user ID', async()=>{
+        const res = await request(api).get('/habits/user/DummyUser')
+        habitId = res.body.habits[0].id
+        console.log(habitId)
+        expect(res.body.habits).toHaveLength(1)
+    })
+    
+    it('returns specific habit text based on habitid', async() =>{
+        const res = await request(api).get(`/habits/${habitId}`)
+        expect(res.body.title).toBe('Example title')
+    });
+    
 
     it("Deletes habit based on habit ID", async()=>{
-        let idToDelete = "dummyId"
 
-        const res = await request(api).delete(`/habits/${idToDelete}`)
-        expect(res).toBe(5)
+        const res = await request(api).delete(`/habits/${habitId}`)
+        expect(res.status).toBe(204)
     });
+
+    
 
 
 

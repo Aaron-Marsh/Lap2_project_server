@@ -38,7 +38,7 @@ services:
   db:
     image: mongo:latest
     volumes:
-      - "dbdata:/var/lib/mongodb/data"
+      # - "dbdata:/var/lib/mongodb/data"
       - "./db/seeds.js:/docker-entrypoint-initdb.d/seeds.js:ro"
     environment: 
       - MONGO_INITDB_ROOT_USERNAME=billie
