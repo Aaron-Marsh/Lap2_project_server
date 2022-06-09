@@ -43,7 +43,7 @@ class User {
                 const db = await init();
                 // get date (could do on client side)
                 let today = new Date;
-                let currentdate = `${today.getDate()}/${today.getMonth()+1}/${today.getFullYear()}`;
+                let currentdate = `${today.getMonth()+1}/${today.getDate()}/${today.getFullYear()}`;
 
                 let result = await db.collection('users').insertOne({ username, passwordDigest: password, prevDate: currentdate });
                 let newUser = new User(result.insertedId);
