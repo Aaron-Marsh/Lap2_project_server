@@ -42,6 +42,10 @@ describe('habits endpoints', () => {
         expect(res.body.title).toBe('Example title')
     });
     
+    it('Patches habit based on habitId', async()=>{
+        const res = await request(api).patch(`/habits/${habitId}`).send({"command": 1, "id": habitId})
+        expect(res.status).toBe(200)
+    })
 
     it("Deletes habit based on habit ID", async()=>{
 
