@@ -70,7 +70,6 @@ class User {
     }
     
     updateOnNewDay(currentDate) {
-        console.log('using function')
 
         return new Promise (async (res, rej) => {
             try {
@@ -78,18 +77,10 @@ class User {
                 
             let userId = this.id.toString()
             let prevDateAsDate = new Date(this.prevDate)
-            let currentDateAsDate = new Date(currentDate)
-            let firstdate = new Date('1/1/1970')
-            let firstDateInDays = firstdate.getTime() / (1000 * 3600 * 24);
+            let currentDateAsDate = new Date(currentDate)       
             let prevDateInDays = prevDateAsDate.getTime() / (1000 * 3600 * 24);
             let currentDateInDays = currentDateAsDate.getTime() / (1000 * 3600 * 24);
-                // console.log(prevDateInDays)
-                // console.log(this.prevDate)
-                // console.log(currentDateInDays)
-                // console.log(currentDate)
-                // console.log(userId)
-                // console.log(firstDateInDays)
-                // console.log(firstdate.splice("/")[1])
+ 
 
             // Update all daily habits
             if ( currentDateInDays > (prevDateInDays + 1)) {
@@ -104,8 +95,6 @@ class User {
             
             // Update all weekly habits
             let prevSundayInDays = prevDateInDays - ((prevDateInDays + 4) % 7)
-            // console.log(prevSundayInDays)
-            // console.log(currentDateInDays - prevSundayInDays)
 
             if (currentDateInDays >= prevSundayInDays + 7) {
                 
@@ -122,9 +111,7 @@ class User {
             
             // Update all monthly habits
             let prevDateMonth = prevDateAsDate.getMonth()
-            console.log("prevdatemonth"+prevDateMonth)
             let currentDateMonth = currentDateAsDate.getMonth()
-            console.log("currentdatemonth"+currentDateMonth)
             if (currentDateMonth != prevDateMonth) {
                 if (((currentDateMonth === prevDateMonth + 1) || (currentDateMonth === prevDateMonth - 12)) && (currentDateInDays < prevDateInDays + 100)) {
                     // if next month after last login, end streaks for uncompleted monthly habits
