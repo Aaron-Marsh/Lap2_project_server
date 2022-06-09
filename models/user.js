@@ -113,7 +113,7 @@ class User {
             let prevDateMonth = prevDateAsDate.getMonth()
             let currentDateMonth = currentDateAsDate.getMonth()
             if (currentDateMonth != prevDateMonth) {
-                if (((currentDateMonth === prevDateMonth + 1) || (currentDateMonth === prevDateMonth - 12)) && (currentDateInDays < prevDateInDays + 100)) {
+                if (((currentDateMonth === prevDateMonth + 1) || (currentDateMonth === prevDateMonth - 11)) && (currentDateInDays < prevDateInDays + 100)) {
                     // if next month after last login, end streaks for uncompleted monthly habits
                     await db.collection('habits').updateMany( { userId, completed: false, frequency: 'Monthly' }, { $set: { streak: 0}} )
                 } else {
