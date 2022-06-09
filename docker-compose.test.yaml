@@ -1,6 +1,5 @@
 services:
   api:
-    image: node:12.18.4
     container_name: demo_test_api
     environment: 
       - DB_NAME=habitrabbits #this is very important in order to connect to mongo
@@ -11,7 +10,7 @@ services:
   db:
     container_name: demo_test_db
     volumes:
-      - "dbdata:/var/lib/mongodb/data"
+      - "test_db:/var/lib/mongodb/data"
       - "./db/seeds.js:/docker-entrypoint-initdb.d/seeds.js:ro"
     environment: 
       - MONGO_INITDB_ROOT_USERNAME=billie
