@@ -38,6 +38,10 @@ To run a local version of the server:
 - Heroku - Group effort
 - Serverside testing - Gio and Aaron
 
+All Contributors:
+
+Aaron, Billie, Gio, Tom
+
 ## Bugs
 - When testing, could not get refreshing database on each new test to work
 
