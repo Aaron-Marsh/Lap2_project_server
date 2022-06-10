@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/user');
+const Habit = require('../models/habit');
+const { showUserHabits } = require('./habits');
 
 async function register(req, res) {
     try {
@@ -22,14 +24,24 @@ async function login(req, res) {
     try {
         const user = await User.findByUsername(req.body.username);
         if(!user){ throw new Error('No user with this username') }
-        const authed = bcrypt.compare(req.body.password, user.passwordDigest)
-        if (!!authed) {
-            res.status(200).json({ username: user.username, userId: user.id, prevDate: user.prevDate});
+        const authed = await bcrypt.compare(req.body.password, user.passwordDigest)
+        if (authed) {
+            
+            let today = new Date;
+            let currentDate = `${today.getMonth()+1}/${today.getDate()}/${today.getFullYear()}`;
+            
+            
+            if (user.prevDate != currentDate) {
+                await user.updateOnNewDay(currentDate)
+                await user.update(currentDate)
+                
+            }
+            res.status(200).json({ username: user.username, userId: user.id });
         } else {
             throw new Error('User could not be authenticated')
         }
     } catch (err) {
-        res.status(401).json({ err });
+        res.status(401).json( {msg:'Incorrect Username or Password'} );
     }
 }
 

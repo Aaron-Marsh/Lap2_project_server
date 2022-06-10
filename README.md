@@ -1,12 +1,47 @@
 # Lap2_project_server
+# Rabbit Habits
 
-## required functions
+## Installation & Usage
+Client runs on https://rabbit-habits.netlify.app/ with a backend deployed on Heroku
 
-- create habit
-- create user and login
-- get habits for each user (send the user.id)
-- delete habit
-- patch for streak update
-- patch for number of current
-- patch for updating completed
+To run a local version of the server:
+- Clone repo and cd to `Lap2_project_server`
+- Run `docker compose up`
+- Server runs on localhost:3000
+- Close server with `docker compose down -v`
 
+## Technologies
+- MongoDB
+- Atlas
+- Heroku
+- Bcryptjs
+- Express
+- Jest
+- Supertest
+
+## Process
+- Started on localhost then deployed to heroku through Atlas
+
+## Wins and Challenges
+### Wins
+- Got desired functionality to work
+- Implemented authorisation with hashed passwords
+- Allowed daily, weekly, and monthly habits
+
+### Challenges
+- Testing was difficult to set up
+- Deploying server through atlas and heroku took time
+
+## Contribution Guide
+- Server and database - Mostly Aaron
+- Deployment - Group effort
+- Serverside testing - Gio and Aaron
+
+## Bugs
+- When testing, could not get refreshing database on each new test to work
+
+## Future Features
+- Add a freeze streaks feature for if user wants a break
+
+## Licence
+MIT Licence

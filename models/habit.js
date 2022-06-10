@@ -10,7 +10,6 @@ class Habit {
         this.current = data.current
         this.completed = data.completed
         this.streak = data.streak
-        this.startdate = data.startdate
         this.userId = data.userId
     }
 
@@ -56,12 +55,13 @@ class Habit {
     }
 
 
+    
 
-    static create(title, frequency, goal, startdate, userId) {
+    static create(title, frequency, goal, userId) {
         return new Promise (async (res, rej) => {
             try {
                 const db = await init();
-                let habitData = await db.collection('habits').insertOne({ title, frequency, goal, current: 0, completed: false, streak: 0, startdate, userId  });
+                let habitData = await db.collection('habits').insertOne({ title, frequency, goal, current: 0, completed: false, streak: 0, userId  });
                 let newHabit = new Habit(habitData.insertedId);
                 res(newHabit);
             } catch (err) {
@@ -70,15 +70,24 @@ class Habit {
         })
     }
 
-    update(id, command) {
+    update(command) {
         return new Promise (async (res, rej) => {
             try {
                 const db = await init();
-                const updatedHabit = await db.collection('habits').updateOne( {_id: ObjectId(id) }, {$inc: {current: command}})
+                
+                if ((command === 1) && (this.current === this.goal - 1)) {
+                        await db.collection('habits').updateOne( {_id: ObjectId(this.id) }, {$set: {completed: true}, $inc: {streak: 1}})
+                        
+                }
+                        
+                const updatedHabit = await db.collection('habits').updateOne( {_id: ObjectId(this.id) }, {$inc: {current: command}})
+                    
                 res(updatedHabit);
+                
             } catch(err) {
                 rej('Habit could not be updated')
             }
+        
         })
 
 
