@@ -34,7 +34,8 @@ To run a local version of the server:
 
 ## Contribution Guide
 - Server and database - Mostly Aaron
-- Deployment - Group effort
+- Atlas - Aaron
+- Heroku - Group effort
 - Serverside testing - Gio and Aaron
 
 ## Bugs
@@ -42,6 +43,7 @@ To run a local version of the server:
 
 ## Future Features
 - Add a freeze streaks feature for if user wants a break
+- Could add calander of progress
 
 ## Licence
 MIT Licence
